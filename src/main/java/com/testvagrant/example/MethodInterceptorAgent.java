@@ -26,6 +26,7 @@ public class MethodInterceptorAgent {
 
     public static void premain(String agentArgs, Instrumentation inst) {
         log.info("Starting the byte-buddy-agent");
+
         new AgentBuilder.Default()
                 .type(ElementMatchers.nameContains("com.testvagrant.example.implementation"))
                 .transform((builder, typeDescription, classLoader, javaModule, protectionDomain) ->
@@ -39,8 +40,8 @@ public class MethodInterceptorAgent {
                 .installOn(inst);
 
         Runtime.getRuntime().addShutdownHook(new Thread(() -> {
-            saveMethodTestMapToJsonFile("src/main/resources/output.json");
-            log.info("Shutdown hook executed. Map saved to JSON file.");
+            saveMethodTestMapToJsonFile("src/main/resources/source-tests-map.json");
+            log.info("Shutdown hook executed. json file generated at - src/main/resources/output.json");
         }));
     }
 
