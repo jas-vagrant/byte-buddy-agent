@@ -1,10 +1,11 @@
 # BYTE-BUDDY-AGENT
 
-This is a maven project to create an instrumentation agent using net.bytebuddy lib.
+This is a maven project to create an instrumentation agent using [bytebuddy](https://bytebuddy.net/#/) lib.
 
 This agent instruments the source code methods to get the list of test methods executing a particular source-method.
-It generates a json file in path `src/main/resources/output.json` which contains a list with source-method name as key
-and list of test-methods names (which executes that source-method) mapped to that source-method as values
+It generates a json file in application path `src/main/resources/source-tests-map.json` which contains a list with 
+source-method name as key and list of test-methods names (which executes that source-method) mapped to that 
+source-method as values.
 
 
 
