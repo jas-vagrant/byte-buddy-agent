@@ -41,7 +41,7 @@ public class MethodInterceptorAgent {
 
         Runtime.getRuntime().addShutdownHook(new Thread(() -> {
             saveMethodTestMapToJsonFile("src/main/resources/source-tests-map.json");
-            log.info("Shutdown hook executed. json file generated at - src/main/resources/output.json");
+            log.info("Shutdown hook executed. json file generated at - src/main/resources/source-tests-map.json");
         }));
     }
 
@@ -59,8 +59,16 @@ public class MethodInterceptorAgent {
         public static void enter() {
             StackTraceElement[] stackTrace = Thread.currentThread().getStackTrace();
             String methodName = stackTrace[1].getClassName() + "." + stackTrace[1].getMethodName();
-            if (stackTrace[2].getClassName().endsWith("Test")) {
-                String testName = stackTrace[2].getClassName() + "." + stackTrace[2].getMethodName();
+            String callingClass = stackTrace[2].getClassName();
+            String callingMethodName = callingClass + "." + stackTrace[2].getMethodName();
+            if ((callingClass.endsWith("Test")) || (methodTestMap.get(callingMethodName) != null)) {
+                String testName;
+
+                if (callingClass.endsWith("Test")) {
+                    testName = callingMethodName;
+                } else {
+                    testName = methodTestMap.get(callingMethodName).get(methodTestMap.get(callingMethodName).size() - 1);
+                }
 
                 List<String> testNamesMapped;
                 if (methodTestMap.get(methodName) == null) {
